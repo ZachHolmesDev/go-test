@@ -9,16 +9,16 @@ import (
 )
 
 type App struct {
-    AppID int    `json:"appid"`
-    Name  string `json:"name"`
+	AppID int    `json:"appid"`
+	Name  string `json:"name"`
 }
 
 type AppList struct {
-    Apps []App `json:"apps"`
+	Apps []App `json:"apps"`
 }
 
 type AppListData struct {
-    AppList AppList `json:"applist"`
+	AppList AppList `json:"applist"`
 }
 
 func main() {
@@ -40,6 +40,20 @@ func main() {
 	// game_id := "2050310"
 	game_name := "OutWave"
 
-	// call the function 
+	// call the function
+	appID, err := find_id_by_name(all_steam_games_data, game_name)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Printf("AppID is: %d\n", appID)
+	}
+}
 
+func find_id_by_name(data AppListData, name string) (int, error) {
+	for _, app := range data.AppList.Apps {
+		if app.Name == name {
+			return app.AppID, nil
+		}
+	}
+	return 0, errors.New("app not found")
 }
